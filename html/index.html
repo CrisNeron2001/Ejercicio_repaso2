@@ -6,7 +6,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Apoyo Prueba 2</title>
     <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/css/bootstrap.min.css">
-    <script src="https://code.jquery.com/jquery-3.4.1.slim.min.js"></script>
+    <script src="https://code.jquery.com/jquery-3.4.1.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/popper.js@1.16.0/dist/umd/popper.min.js"></script>
     <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/js/bootstrap.min.js"></script>   
     <script src="../js/script.js" ></script>
@@ -29,7 +29,7 @@
                         <input type="password" class="form-control" id="rePasswordUsuario" name="rePasswordUsuario" placeholder="Ingrese su contraseña..."></input>
                         <br/>
                         <label for="selectRegion">Seleccione su región:</label>
-                        <select class="form-control">
+                        <select id="id_region" class="form-control">
                             <option value="1">I Región</option>
                             <option value="2">II Región</option>
                             <option value="3">III Región</option>
@@ -58,6 +58,13 @@
             </div>
         </div>
     </div>
-
+    <script>
+        $(document).ready(function(){
+            $.get("https://www.themelbd.com/api/json/v1/1/categories.php",
+            function(data){
+                console.log("funciono", data);
+            })
+        })
+    </script>
 </body>
 </html>
