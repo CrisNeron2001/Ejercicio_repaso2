@@ -66,7 +66,7 @@
     </div>
     <script>
         $(document).ready(function(){
-            $.get("https://apps.gasco.cl/v1/locationService/regions/getAllRegions",
+            $.get("https://apps.gasco.cl/v1/locationService/regions/getAllRegions/",
             function(data){
                 $("#id_region").append('<option value="0">Seleccione una region')
                 $.each(data.data, function(i, {id, name, ordinal}){
