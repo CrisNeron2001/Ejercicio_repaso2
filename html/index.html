@@ -40,6 +40,11 @@
                             -->
                         </select>    
                         <BR/>
+                        <label for="selectProvincia">Seleccione su provincia:</label>
+                        <select id="id_provincia" class="form-control"></select>
+                        <br/>
+                        <label for="selectComuna">Seleccione su comuna:</label>
+                        <select id="id_comuna" class="form-control"></select>
                         <!--
                         <label for="emailUsuario">Direccion de correo</label>
                         <input type="email" class="form-control" id="emailUsuario" name="emailUsuario" placeholder="Ingrese su correo..."></input>
@@ -68,11 +73,24 @@
         $(document).ready(function(){
             $.get("https://apps.gasco.cl/v1/locationService/regions/getAllRegions/",
             function(data){
-                $("#id_region").append('<option value="0">Seleccione una region')
+                $("#id_region").append('<option value="0">Seleccione una region</option>')
                 $.each(data.data, function(i, {id, name, ordinal}){
                     $("#id_region").append('<option value="'+id+'">'+name+'('+ordinal+')</option>')
                 })
                 $("#id_region").append('</select>');
+            })
+            $('#id_region').change(function(){
+                var selected_region = $('#id_region').val();
+                console.log('selected_region', selected_region);
+                var endpoint = "https://apps.gasco.cl/v1/locationService/provinces/byRegionId/4/"
+
+                $.get(endpoint,
+                function(data){
+                    $.each(data.data, function(i, {id, name, regionId}){
+                        console.log("id ", id, "nombre provincia ", name)
+                        $("#id_provincia").append('<option value="'+id+'">'+name+'</option>')
+                    })
+                })
             })
         })
     </script>
