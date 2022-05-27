@@ -9,7 +9,7 @@
     <script src="https://code.jquery.com/jquery-3.4.1.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/popper.js@1.16.0/dist/umd/popper.min.js"></script>
     <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/js/bootstrap.min.js"></script>   
-    <script src="../js/script.js" ></script>
+   
 </head>
 <body>
     <div class="container-fluid">
@@ -19,80 +19,76 @@
                     <fieldset>
                     <legend>Formulario de contacto</legend>    
                     <div class="form-group">
-                        <!--
-                        <label id="lblNombre" for="nombreUsuario">Nombre</label>
-                        <input type="text" class="form-control" id="nombreUsuario" name="nombreUsuario" placeholder="Ingrese su nombre..."></input>
-                        <br/>
-                        <label for="passwordUsuario">Contraseña</label>
-                        <input type="password" class="form-control" id="passwordUsuario" name="passwordUsuario" placeholder="Ingrese su contraseña..."></input>
-                        <br/>
-                        <label for="rePasswordUsuario">Reingrese Contraseña</label>
-                        <input type="password" class="form-control" id="rePasswordUsuario" name="rePasswordUsuario" placeholder="Ingrese su contraseña..."></input>
-                        <br/>
-                        -->
-                        <label for="selectRegion">Seleccione su región:</label>
+                        <label for="id_region">Seleccione su región:</label>
                         <select id="id_region" class="form-control">
-                            <!--
-                            <option value="1">I Región</option>
-                            <option value="2">II Región</option>
-                            <option value="3">III Región</option>
-                            <option value="13">RM</option>
-                            -->
-                        </select>    
-                        <BR/>
-                        <label for="selectProvincia">Seleccione su provincia:</label>
-                        <select id="id_provincia" class="form-control"></select>
-                        <br/>
-                        <label for="selectComuna">Seleccione su comuna:</label>
-                        <select id="id_comuna" class="form-control"></select>
-                        <!--
-                        <label for="emailUsuario">Direccion de correo</label>
-                        <input type="email" class="form-control" id="emailUsuario" name="emailUsuario" placeholder="Ingrese su correo..."></input>
-                        <br/>
-                        <label for="edadUsuario">Edad</label>
-                        <input type="number" class="form-control" id="edadUsuario" name="edadUsuario" placeholder="Ingrese su edad..."></input>
-                        <br/>
-                        
-                        <div class="form-check">
-                            <input class="form-check-input" type="checkbox" value="" id="terminosCondiciones"></input>
-                            <label class="form-check-label" for="terminosCondiciones">Ha leido los términos y condiciones?</label>
-
-                        </div>
-                        <br/>
-                        <button onclick="validarFormulario(this)" >Validar</button>
-                        <input type="reset" value="Limpiar"></input>
-                        <input  id="boton1" name="boton1" type="button" value="click"></input>
-                                           </div> 
-                        -->
+                            <option value="0">Seleccione una región...</option>
+                        </select>
+                        <br>
+                        <label for="id_provincia">Seleccione su provincia:</label>
+                        <select id="id_provincia" class="form-control">
+                            <option value="0">Seleccione una provincia...</option>
+                        </select>
+                        <br>
+                        <label for="id_comuna">Seleccione su comuna:</label>
+                        <select id="id_comuna" class="form-control">
+                            <option value="0">Seleccione una comuna...</option>
+                        </select>
+                        <br>
+                        </div> 
                     </fieldset>
                 </form>
             </div>
         </div>
     </div>
-    <script>
-        $(document).ready(function(){
+   
+    <script >
+        $(document).ready(function() {
             $.get("https://apps.gasco.cl/v1/locationService/regions/getAllRegions/",
             function(data){
-                $("#id_region").append('<option value="0">Seleccione una region</option>')
                 $.each(data.data, function(i, {id, name, ordinal}){
-                    $("#id_region").append('<option value="'+id+'">'+name+'('+ordinal+')</option>')
+                    $("#id_region").append('<option value="'+id+'">'+name+' ('+ordinal+')</option>');
                 })
-                $("#id_region").append('</select>');
             })
-            $('#id_region').change(function(){
-                var selected_region = $('#id_region').val();
-                console.log('selected_region', selected_region);
-                var endpoint = "https://apps.gasco.cl/v1/locationService/provinces/byRegionId/4/"
+        }) 
 
-                $.get(endpoint,
-                function(data){
-                    $.each(data.data, function(i, {id, name, regionId}){
-                        console.log("id ", id, "nombre provincia ", name)
-                        $("#id_provincia").append('<option value="'+id+'">'+name+'</option>')
-                    })
+        // variables
+
+        var endpoint_region = "https://apps.gasco.cl/v1/locationService/provinces/byRegionId/"
+
+        $('#id_region').change(function() {
+            var selected_region = $('#id_region').val();
+            $.get(endpoint_region+selected_region+"/",
+            function(data){
+                // $("#id_provincia").html("<option value=\"0\">Seleccione una provincia...</option>");
+                $("#id_provincia").empty().append(new Option("Seleccione una provincia...", 0));
+
+                // $("#id_comuna").html("<option value=\"0\">Seleccione una comuna...</option>");
+                $("#id_comuna").empty().append(new Option("Seleccione una comuna...", 0));;
+
+                $.each(data.data, function(i, {id, name, regionId}){
+                    $("#id_provincia").append(new Option(name, id));
                 })
-            })
+            }) 
         })
-    </script>
+
+        $('#id_provincia').change(function() {
+            var selected_provincia = $('#id_provincia').val();
+            var endpoint = "https://apps.gasco.cl/v1/locationService/communes/byProvinceId/"+selected_provincia+"/"
+            $.get(endpoint,
+            function(data){
+                $("#id_comuna").empty().append(new Option("Seleccione una comuna...", 0));
+                $.each(data.data, function(i, {id, name}){
+                    $("#id_comuna").append(new Option(name, id));
+                })
+            }) 
+        })
+        function getBasepath(){
+            return 
+        }
+
+
+
+
+  </script>
 </body>
 </html>
